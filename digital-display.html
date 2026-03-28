@@ -32,15 +32,19 @@ body{
 }
 
 .nav-menu {
-    background: #111827;
-    padding: 15px;
-    text-align: center;
-    border-bottom: 1px solid #374151;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+  background: #111827;
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid #374151;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.nav-menu a { color: white; margin: 0 10px; text-decoration: none; font-size: 0.9em; opacity: 0.6; }
+.nav-menu a { color: #fff; margin: 0 10px; text-decoration: none; font-size: .9em; opacity: 0.8; }
 .nav-menu .active { opacity: 1; font-weight: bold; border-bottom: 2px solid var(--base-color); padding-bottom: 5px; }
 
 h1 { text-align: center; font-size: 1.5rem; margin: 20px 0; }
@@ -166,12 +170,13 @@ h1 { text-align: center; font-size: 1.5rem; margin: 20px 0; }
 <nav class="nav-menu">
     <a href="digital-datos-graficos.html" style="color: var(--base-color); font-weight: bold; margin-right: 10px; opacity: 1;">DIGITAL:</a>
     <a href="digital-totales-familas-productos.html">Productos</a>
-    <a href="digital-display.html" class="active">Display</a>
+    <a href="digital-display.html" class="active">Display (s2i)</a>
+    <a href="digital-display-dashboard.html">Display (adserver)</a>
     <a href="digital-redes-sociales.html">RRSS</a>
     <a href="index.html" style="margin-left: 20px; border-left: 1px solid #4b5563; padding-left: 20px;">🏠 Home</a>
 </nav>
 
-<h1>DIGITAL - Facturación Display</h1>
+<h1>DIGITAL - Facturación Display (Informe s2i)</h1>
 
 <div class="container">
     <div class="card">
