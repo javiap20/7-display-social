@@ -272,6 +272,7 @@ let rawData=[];
 let currentRowsToDisplay = [];
 let currentIndex = 0;
 const ROWS_PER_PAGE = 100;
+const excelUrl = "PRODUCCION%20DIGITAL.xlsx";
 
 function toTitleCase(str) {
     if(!str) return "";
@@ -302,6 +303,19 @@ fileInput.onchange = e => {
   };
   r.readAsArrayBuffer(f);
 };
+
+// Carga automática al abrir la página
+fetch(excelUrl)
+    .then(r => r.arrayBuffer())
+    .then(buf => {
+        const wb = XLSX.read(new Uint8Array(buf), {type:"array"});
+        init(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:""}));
+        document.getElementById("loadStatus").innerText = "✅ Datos cargados automáticamente";
+        document.getElementById("loadStatus").style.color = "var(--ok-green)";
+    })
+    .catch(() => {
+        document.getElementById("loadStatus").innerText = "⚠️ No se pudo cargar automáticamente. Carga el archivo manualmente.";
+    });
 
 function num(v){
   if(v==null) return 0;

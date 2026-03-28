@@ -233,6 +233,7 @@ td { padding: 10px; border-bottom: 1px solid #1f2937; text-align: center; }
 const MONTHS=["01 Enero","02 Febrero","03 Marzo","04 Abril","05 Mayo","06 Junio","07 Julio","08 Agosto","09 Septiembre","10 Octubre","11 Noviembre","12 Diciembre"];
 let rawData=[];
 const FAMILIA_TARGET = "SOCIAL NETWORKS";
+const excelUrl = "PRODUCCION%20DIGITAL.xlsx";
 
 fileInput.onchange = e => {
  const f = e.target.files[0];
@@ -266,6 +267,20 @@ fileInput.onchange = e => {
  if (f.name.endsWith("json")) r.readAsText(f);
  else r.readAsArrayBuffer(f);
 };
+
+// Carga automática al abrir la página
+fetch(excelUrl)
+ .then(r => r.arrayBuffer())
+ .then(buf => {
+  const wb = XLSX.read(new Uint8Array(buf), {type:"array"});
+  init(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:""}));
+  const status = document.getElementById("loadStatus");
+  status.innerText = "✅ Datos cargados automáticamente";
+  status.style.color = "var(--ok-green)";
+ })
+ .catch(() => {
+  document.getElementById("loadStatus").innerText = "⚠️ No se pudo cargar automáticamente. Carga el archivo manualmente.";
+ });
 
 function normalizeText(s){
  if(!s) return "";
