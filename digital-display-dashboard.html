@@ -206,7 +206,10 @@ h1 { text-align: center; font-size: 1.5rem; margin: 20px 0; }
 <script>
 let rawData = [];
 let cpmChartInstance = null;
-const excelUrl = "Informe%20Adserver.xlsx";
+const excelUrls = [
+    "Informe%20Adserver%20a%C3%B1o%20actual.xlsx",
+    "Informe%20Adserver%20a%C3%B1o%20anterior.xlsx"
+];
 
 const MONTHS_CONFIG = [
     { id: "01", en: "January", matches: ["enero", "january", "01"] },
@@ -259,17 +262,26 @@ fileInput.onchange = e => {
     reader.readAsArrayBuffer(f);
 };
 
-// Carga automática al abrir la página
-fetch(excelUrl)
-    .then(r => r.arrayBuffer())
-    .then(buf => {
-        const wb = XLSX.read(new Uint8Array(buf), {type:"array"});
-        init(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:""}));
-        document.getElementById("loadStatus").textContent = "✅ Datos cargados automáticamente";
-    })
-    .catch(() => {
-        document.getElementById("loadStatus").textContent = "⚠️ No se pudo cargar automáticamente. Carga el archivo manualmente.";
-    });
+// Carga automática de los dos archivos al abrir la página
+const statusEl = document.getElementById("loadStatus");
+statusEl.textContent = "⏳ Cargando datos...";
+
+Promise.all(excelUrls.map(url =>
+    fetch(url)
+        .then(r => r.arrayBuffer())
+        .then(buf => {
+            const wb = XLSX.read(new Uint8Array(buf), {type:"array"});
+            return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:""});
+        })
+))
+.then(datasets => {
+    const combined = datasets.flat();
+    init(combined);
+    statusEl.textContent = "✅ Datos cargados automáticamente";
+})
+.catch(() => {
+    statusEl.textContent = "⚠️ No se pudo cargar automáticamente. Carga el archivo manualmente.";
+});
 
 function init(data){
     rawData = data.map(d => {
